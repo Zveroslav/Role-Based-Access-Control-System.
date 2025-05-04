@@ -24,6 +24,9 @@ export class User {
   @Column()
   passwordHash: string;
 
+  @Column({ nullable: true })
+  refreshToken?: string;
+
   @ManyToOne(() => Organization, (org) => org.users, { eager: true })
   organization: Organization;
 

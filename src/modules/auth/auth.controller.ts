@@ -28,6 +28,15 @@ class LoginResponse {
   accessToken: string;
 }
 
+class RefreshTokenDto {
+  @ApiProperty({
+    example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+    description: 'The refresh token',
+  })
+  @IsString({ message: 'RefreshToken must be a string' })
+  refreshToken: string;
+}
+
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
@@ -43,5 +52,18 @@ export class AuthController {
   @ApiResponse({ status: 401, description: 'Invalid credentials' })
   async login(@Body() body: LoginDto): Promise<LoginResponse> {
     return this.authService.login(body.email, body.password);
+  }
+
+  @Post('refresh')
+  @ApiBody({ type: RefreshTokenDto })
+  @ApiResponse({
+    status: 201,
+    description: 'Refresh token successful',
+    type: LoginResponse,
+  })
+  async refresh(@Body() body: RefreshTokenDto): Promise<LoginResponse> {
+
+    console.log('Refresh token:', body.refreshToken);
+    return this.authService.refreshToken(body.refreshToken);
   }
 }

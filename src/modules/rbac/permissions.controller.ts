@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import {
@@ -72,14 +72,13 @@ export class PermissionsController {
     type: CheckResponse,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @HttpCode(200)
   async check(@Body() dto: CheckDto): Promise<CheckResponse> {
-    console.log('DTO:', dto);
     const user = await this.userRepo.findOne({
       where: { id: dto.userId },
       relations: ['roles', 'roles.permissions', 'organization'],
     });
 
-    console.log('User:', user);
     const rec = await this.recRepo.findOne({
       where: { id: dto.resourceId },
       relations: ['owner', 'organization'],
@@ -89,6 +88,6 @@ export class PermissionsController {
       return { allowed: false, reason: 'USER_OR_RECORD_NOT_FOUND' };
 
     const allowed = this.acs.can(user, dto.action, rec);
-    return { allowed };
+    return { allowed, reason: allowed ? 'Whether the action is allowed' : 'FORBIDDEN' };
   }
 }

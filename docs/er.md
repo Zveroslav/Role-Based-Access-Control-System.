@@ -18,6 +18,7 @@ erDiagram
     string email
     string name
     string passwordHash
+    string refreshToken
     int organizationId FK
   }
   Role {

@@ -7,7 +7,7 @@ import {
   ApiProperty,
 } from '@nestjs/swagger';
 import { PatientService } from './patient.service';
-import { RbacGuard } from '../../common/rbac.guard';
+import { RbacGuard } from './rbac.guard';
 import { SetMetadata } from '@nestjs/common';
 import { Action } from 'src/common/constants/rbac.enums';
 import { JwtGuard } from '../auth/jwt.guard';

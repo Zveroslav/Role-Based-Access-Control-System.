@@ -37,7 +37,8 @@ export class AccessControlService {
           p.action === action &&
           p.scope === Scope.ORG,
       ) &&
-      user.organization.id === record.organization.id
+      (user.organization.id === record.organization.id ||
+        user.organization.parent?.id === record.organization.id)
     ) {
       return true;
     }
